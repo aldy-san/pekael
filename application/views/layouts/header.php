@@ -92,6 +92,12 @@
           <span>Dashboard</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link <?= $this->uri->segment(1) === 'program' ? '' : 'collapsed'; ?>" href="<?= base_url('program'); ?>">
+          <i class="bi bi-grid"></i>
+          <span>Template Table</span>
+        </a>
+      </li>
     </ul>
   </aside><!-- End Sidebar-->
   <?php endif;?>

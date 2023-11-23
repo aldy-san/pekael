@@ -18,7 +18,12 @@ class Mahasiswa extends CI_Controller {
 	public function index()
 	{
 		$data = $this->globalData;
-		//var_dump($data);die;
 		customView('mahasiswa/dashboard', $data);
+	}
+	public function program()
+	{
+		$data = $this->globalData;
+		$data['program'] = $this->db->get('program')->result_array();
+		customView('mahasiswa/program', $data);
 	}
 }
