@@ -6,3 +6,5 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 $route['login'] = 'Auth/login';
+$route['logout'] = 'Home/logout';
+$route['dashboard'] = 'Mahasiswa/index';
