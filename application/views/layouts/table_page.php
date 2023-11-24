@@ -23,7 +23,17 @@
 					<tr>
 						<td><?= $key+1; ?></td>
 						<?php foreach ($columns as $column): ?>
-						<td><?= $item[$column['key']]; ?></td>
+						<td>
+							<?php if($column['type'] === 'string'): ?>
+								<?= $item[$column['key']]; ?>
+							<?php elseif ($column['type'] === 'file'): ?>
+								<?php if($item[$column['key']]): ?>
+									<a href="<?= base_url('/files/'.$item[$column['key']]); ?>" target="_blank" class="btn btn-info text-white mt-2">See File</a>
+								<?php else: ?>
+									<b>-</b>
+								<?php endif; ?>
+							<?php endif; ?>
+						</td>
 						<?php endforeach; ?>
 						<td>
 							<a href="<?= base_url($base.'/detail/'.$item['id']); ?>" class="btn btn-info text-white"><i class="bi bi-eye"></i></a>

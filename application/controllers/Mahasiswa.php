@@ -34,16 +34,31 @@ class Mahasiswa extends CI_Controller {
 			[
 				'title' => 'Program Name',
 				'key' => 'name',
+				'type' => 'string'
 			],
 			[
 				'title' => 'Start Date',
 				'key' => 'start_date',
-				'attr' => 'data-type="date" data-format="DD/MM/YYYY"'
+				'attr' => 'data-type="date" data-format="DD/MM/YYYY"',
+				'type' => 'string'
 			],
 			[
 				'title' => 'End Date',
 				'key' => 'end_date',
-				'attr' => 'data-type="date" data-format="DD/MM/YYYY"'
+				'attr' => 'data-type="date" data-format="DD/MM/YYYY"',
+				'type' => 'string'
+			],
+			[
+				'title' => 'File',
+				'key' => 'file',
+				'attr' => 'data-sortable="false"',
+				'type' => 'file'
+			],
+			[
+				'title' => 'File 2',
+				'key' => 'file2',
+				'attr' => 'data-sortable="false"',
+				'type' => 'file'
 			],
 		];
 		customView('layouts/table_page', $data);
@@ -55,12 +70,29 @@ class Mahasiswa extends CI_Controller {
 		$data['title'] = 'Add Program';
 		$data['isEdit'] = true;
         if($this->input->post()){
-			$form = [
-				'name' => $this->input->post('name'),
-				'start_date' => $this->input->post('start_date'),
-				'end_date' => $this->input->post('end_date'),
-				//'files' => $file,
-			];
+			$config['upload_path']	= './files';
+			$config['allowed_types'] = 'pdf';
+			$file_data = [];
+			foreach ($_FILES as $key => $value) {
+				if($value['size'] > 0){
+					$file = $_FILES['file']['name'];
+					$this->load->library('upload');
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$file_data[$key] = '';
+					} else {
+						$file_data[$key] = $this->upload->data('file_name');
+					}
+				}
+			}
+			$form = array_merge(
+				[
+					'name' => $this->input->post('name'),
+					'start_date' => $this->input->post('start_date'),
+					'end_date' => $this->input->post('end_date'),
+				],
+				$file_data
+			);
 			$this->db->insert($data['base'], $form);
 			$this->session->set_flashdata('alertForm', 'Add data success');
 			$this->session->set_flashdata('alertType', 'success');
@@ -84,12 +116,29 @@ class Mahasiswa extends CI_Controller {
 		$data['title'] = 'Edit Program';
 		$data['isEdit'] = true;
 		if($this->input->post()){
-			$form = [
-				'name' => $this->input->post('name'),
-				'start_date' => $this->input->post('start_date'),
-				'end_date' => $this->input->post('end_date'),
-				//'files' => $file,
-			];
+			$config['upload_path']	= './files';
+			$config['allowed_types'] = 'pdf';
+			$file_data = [];
+			foreach ($_FILES as $key => $value) {
+				if($value['size'] > 0){
+					$file = $_FILES['file']['name'];
+					$this->load->library('upload');
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$file_data[$key] = '';
+					} else {
+						$file_data[$key] = $this->upload->data('file_name');
+					}
+				}
+			}
+			$form = array_merge(
+				[
+					'name' => $this->input->post('name'),
+					'start_date' => $this->input->post('start_date'),
+					'end_date' => $this->input->post('end_date'),
+				],
+				$file_data
+			);
 			$this->db->where(['id' => $id])->update($data['base'], $form);
 			$this->session->set_flashdata('alertForm', 'Edit data success');
 			$this->session->set_flashdata('alertType', 'success');
