@@ -56,9 +56,8 @@ class Logged extends CI_Controller {
 			$oldPassword = $this->input->post('old-password');
 			$password = $this->input->post('password');
 			$confirmPassword = $this->input->post('confirm-password');
-			$user = $this->db->get_where('user', ['username' => $this->session->userdata('user')['username']])->row_array();
 			if($password === $confirmPassword){
-				if(md5($oldPassword) === $user['password']){
+				if(md5($oldPassword) === $this->globalData['user']['password']){
 					$form = ['password' => md5($this->input->post('password')),];
 					$this->db->where(['username' => $this->globalData['user']['username']])->update('user', $form);
 					$this->session->set_flashdata('alertForm', 'Password berhasil diubah');

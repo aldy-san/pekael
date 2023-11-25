@@ -32,13 +32,6 @@
       	<i class="bi bi-list toggle-sidebar-btn"></i>
 	 	<?php endif ?>
     </div>
-    <!--<div class="search-bar">
-      <form class="search-form d-flex align-items-center" method="POST" action="#">
-        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-      </form>
-    </div>-->
-
   		<?php if(isset($user)): ?>
 			<nav class="header-nav ms-auto">
 				<ul class="d-flex align-items-center">
@@ -98,6 +91,12 @@
         <a class="nav-link <?= $this->uri->segment(1) === 'program' ? '' : 'collapsed'; ?>" href="<?= base_url('program'); ?>">
           <i class="bi bi-grid"></i>
           <span>Template Table</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link <?= $this->uri->segment(1) === 'pkl' ? '' : 'collapsed'; ?>" href="<?= base_url('pkl'); ?>">
+          <i class="bi bi-grid"></i>
+          <span>PKL</span>
         </a>
       </li>
     </ul>
