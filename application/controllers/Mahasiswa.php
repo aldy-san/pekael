@@ -94,7 +94,7 @@ class Mahasiswa extends CI_Controller {
 				$file_data
 			);
 			$this->db->insert($data['base'], $form);
-			$this->session->set_flashdata('alertForm', 'Add data success');
+			$this->session->set_flashdata('alertForm', 'Tambah data berhasil');
 			$this->session->set_flashdata('alertType', 'success');
 			redirect($data['base']);
 		}
@@ -140,7 +140,7 @@ class Mahasiswa extends CI_Controller {
 				$file_data
 			);
 			$this->db->where(['id' => $id])->update($data['base'], $form);
-			$this->session->set_flashdata('alertForm', 'Edit data success');
+			$this->session->set_flashdata('alertForm', 'Edit data berhasil');
 			$this->session->set_flashdata('alertType', 'success');
 			redirect($data['base']);
 		}
@@ -151,7 +151,7 @@ class Mahasiswa extends CI_Controller {
 	{
 		$data['base'] = 'program';
 		$this->db->where(['id' => $this->input->post('id')])->delete($data['base']);
-        $this->session->set_flashdata('alertForm', 'Delete data success');
+        $this->session->set_flashdata('alertForm', 'Hapus data berhasil');
 		$this->session->set_flashdata('alertType', 'success');
         redirect($data['base']);
 	}

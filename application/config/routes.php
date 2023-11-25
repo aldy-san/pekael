@@ -17,3 +17,9 @@ $route['program/add'] = 'Mahasiswa/program_add';
 $route['program/detail/(:num)'] = 'Mahasiswa/program_detail/$1';
 $route['program/edit/(:num)'] = 'Mahasiswa/program_edit/$1';
 $route['program/delete'] = 'Mahasiswa/program_delete';
+
+$route['dosen'] = 'Admin/dosen';
+$route['dosen/add'] = 'Admin/dosen_add';
+$route['dosen/detail/(:num)'] = 'Admin/dosen_detail/$1';
+$route['dosen/edit/(:num)'] = 'Admin/dosen_edit/$1';
+$route['dosen/delete'] = 'Admin/dosen_delete';
