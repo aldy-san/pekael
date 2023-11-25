@@ -107,6 +107,7 @@ class Mahasiswa extends CI_Controller {
 			$this->session->set_flashdata('alertType', 'success');
 			redirect($data['base']);
 		}
+		$data['dosen'] = $this->db->order_by('id', 'DESC')->get_where('user', ['role' => 'dosen'])->result_array();
 		customView('forms/pkl', $data);
 	}
 
@@ -117,6 +118,7 @@ class Mahasiswa extends CI_Controller {
 		$data['title'] = 'Detail PKL';
 		$data['isEdit'] = false;
 		$data['data'] = $this->db->get_where($data['base'], ['id' => $id])->row_array();
+		$data['dosen'] = $this->db->order_by('id', 'DESC')->get_where('user', ['role' => 'dosen'])->result_array();
 		customView('forms/pkl', $data);
 	}
 
@@ -155,6 +157,7 @@ class Mahasiswa extends CI_Controller {
 			$this->db->where(['id' => $id])->update($data['base'], $form);
 			$this->session->set_flashdata('alertForm', 'Edit data berhasil');
 			$this->session->set_flashdata('alertType', 'success');
+			$data['dosen'] = $this->db->order_by('id', 'DESC')->get_where('user', ['role' => 'dosen'])->result_array();
 			redirect($data['base']);
 		}
 		$data['data'] = $this->db->get_where($data['base'], ['id' => $id])->row_array();
