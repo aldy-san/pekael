@@ -49,7 +49,7 @@
 					</li>
 					<li class="nav-item dropdown pe-3">
 						<a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-							<img src="<?= base_url('assets/cms/img/profile-img.jpg'); ?>" alt="Profile" class="rounded-circle">
+							<img src="<?= $user['photo'] ? base_url('photos/'.$user['photo']) : base_url('assets/cms/img/img-placeholder.png'); ?>" alt="Profile" class="object-fit-cover rounded-circle" style="aspect-ratio:1;">
 							<span class="d-none d-md-block dropdown-toggle ps-2"><?= $user['name']; ?></span>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">

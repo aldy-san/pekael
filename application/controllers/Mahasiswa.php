@@ -121,7 +121,7 @@ class Mahasiswa extends CI_Controller {
 			$file_data = [];
 			foreach ($_FILES as $key => $value) {
 				if($value['size'] > 0){
-					$file = $_FILES['file']['name'];
+					$file = $_FILES[$key]['name'];
 					$this->load->library('upload');
 					$this->upload->initialize($config);
 					if (!$this->upload->do_upload($key)) {
