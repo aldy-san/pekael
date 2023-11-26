@@ -87,18 +87,26 @@
           <span>Dashboard</span>
         </a>
       </li>
-      <li class="nav-item">
+      <!--<li class="nav-item">
         <a class="nav-link <?= $this->uri->segment(1) === 'program' ? '' : 'collapsed'; ?>" href="<?= base_url('program'); ?>">
           <i class="bi bi-grid"></i>
           <span>Template Table</span>
         </a>
-      </li>
+      </li>-->
       <li class="nav-item">
         <a class="nav-link <?= $this->uri->segment(1) === 'pkl' ? '' : 'collapsed'; ?>" href="<?= base_url('pkl'); ?>">
           <i class="bi bi-grid"></i>
           <span>PKL</span>
         </a>
       </li>
+			<?php if($user['role'] === 'admin'): ?>
+      <li class="nav-item">
+        <a class="nav-link <?= $this->uri->segment(1) === 'dosen' ? '' : 'collapsed'; ?>" href="<?= base_url('dosen'); ?>">
+          <i class="bi bi-grid"></i>
+          <span>Kelola Dosen</span>
+        </a>
+      </li>
+			<?php endif; ?>
     </ul>
   </aside><!-- End Sidebar-->
   <?php endif;?>

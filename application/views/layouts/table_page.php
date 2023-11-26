@@ -1,7 +1,9 @@
 <div class="pagetitle">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1><?= $title ?></h1>
+	<?php if (!isset($access) || in_array('ADD', $access)):?>
     <a href="<?= base_url($base.'/add'); ?>" class="btn btn-primary ml-auto">Tambah Data</a>
+	<?php endif; ?>
   </div>
   <section class="section">
       <div class="row">
@@ -11,11 +13,11 @@
               <table class="table datatable">
                 <thead>
                   <tr>
-					<th>ID</th>
+					<th>NO</th>
 				  	<?php foreach ($columns as $key => $column): ?>
-                    <th <?= isset($column['attr']) ? $column['attr'] : ''; ?>><?= $column['title']; ?></th>
+                    <th class="text-nowrap" <?= isset($column['attr']) ? $column['attr'] : ''; ?>><span class="text-nowrap"><?= $column['title']; ?></span></th>
 					<?php endforeach; ?>
-					<th data-sortable="false">Aksi</th>
+					<th data-sortable="false" data-cellClass>Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -24,29 +26,45 @@
 						<td><?= $key+1; ?></td>
 						<?php foreach ($columns as $column): ?>
 						<td>
-							<?php if($item[$column['key']]): ?>
+							<?php if($column['type'] === 'modal' || $item[$column['key']]): ?>
 								<?php if($column['type'] === 'string'): ?>
 									<?= $item[$column['key']]; ?>
 								<?php elseif ($column['type'] === 'file'): ?>
 									<?php if($item[$column['key']]): ?>
-										<a href="<?= base_url('/files/'.$item[$column['key']]); ?>" target="_blank" class="btn btn-info text-white mt-2">Lihat File</a>
+										<a href="<?= base_url('/files/'.$item[$column['key']]); ?>" target="_blank" class="btn btn-info text-white">Lihat File</a>
 									<?php else: ?>
 										<b>-</b>
 									<?php endif; ?>
 								<?php elseif ($column['type'] === 'status'): ?>
 									<strong class="text-uppercase text-success"><?= $item[$column['key']]; ?></strong>
+								<?php elseif ($column['type'] === 'modal'): ?>
+									<?php if ( str_contains($column['condition'], $item['status'])):?>
+										<button type="button" class="ms-1 me-1 btn btn-warning text-white" data-bs-toggle="modal" data-bs-target="<?= $column['key']; ?>" onclick="<?= 'modalHandler(\''.$column['key'].'\','.$item['id'].')'; ?>" >
+											Lihat Data
+										</button>
+									<?php else: ?>
+										<small class="text-danger text-nowrap"><?= isset($column['default']) ? $column['default'] : ''; ?></small>
+									<?php endif; ?>
 								<?php endif; ?>
 							<?php else: ?>
-								<small class="text-danger"><?= isset($column['default']) ? $column['default'] : ''; ?></small>
+								<small class="text-danger text-nowrap"><?= isset($column['default']) ? $column['default'] : ''; ?></small>
 							<?php endif; ?>
 						</td>
 						<?php endforeach; ?>
 						<td>
-							<a href="<?= base_url($base.'/detail/'.$item['id']); ?>" class="mb-1 mt-1 btn btn-info text-white"><i class="bi bi-eye"></i></a>
-							<a href="<?= base_url($base.'/edit/'.$item['id']); ?>" class="mb-1 mt-1 btn btn-warning text-white"><i class="bi bi-pencil-square"></i></a>
-							<button type="button" class="mb-1 mt-1 btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="$('#form-delete input').attr('value','<?= $item['id']; ?>')">
-							<i class="bi bi-trash"></i>
-							</button>
+							<div class="d-flex g-3">
+								<?php if (!isset($access) || in_array('DETAIL', $access)):?>
+									<a href="<?= base_url($base.'/detail/'.$item['id']); ?>" class="ms-1 me-1 btn btn-info text-white"><i class="bi bi-eye"></i></a>
+								<?php endif; ?>
+								<?php if (!isset($access) || in_array('EDIT', $access)):?>
+								<a href="<?= base_url($base.'/edit/'.$item['id']); ?>" class="ms-1 me-1 btn btn-warning text-white"><i class="bi bi-pencil-square"></i></a>
+								<?php endif; ?>
+								<?php if (!isset($access) || in_array('DELETE', $access)):?>
+								<button type="button" class="ms-1 me-1 btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="$('#form-delete input').attr('value','<?= $item['id']; ?>')">
+								<i class="bi bi-trash"></i>
+								</button>
+								<?php endif; ?>
+							</div>
 						</td>
                   	</tr>
 					  <?php endforeach; ?>
@@ -78,3 +96,21 @@
 		</div>
 	</div>
 </div>
+<script>
+function modalHandler(target, id) {
+	const data = <?= json_encode($data); ?>;
+	const selected = data.find(item => item.id);
+	const inputs = document.querySelectorAll(target + ' input');
+	inputs.forEach(item => {
+		item.value = selected[item.name]
+	});
+	const files = document.querySelectorAll(target + ' a');
+	files.forEach(item => {
+		item.href = '<?= base_url('/files/'); ?>' + selected[item.getAttribute('data-name')]
+	});
+}
+</script>
+<?php
+$this->load->view('modal/seminar');
+$this->load->view('modal/nilai');
+?>

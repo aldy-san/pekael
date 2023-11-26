@@ -7,7 +7,7 @@ class Admin extends CI_Controller {
         parent::__construct();
 		if ($this->session->userdata('user')) {
 			$user = $this->db->get_where('user', ['username' => $this->session->userdata('user')['username']])->row_array();
-			if(!$user) redirect('dashboard');
+			if(!$user || $user['role'] != 'admin') redirect('dashboard');
 		}else{
 			redirect('login');
 		}
@@ -101,7 +101,6 @@ class Admin extends CI_Controller {
 		$data['data'] = $this->db->get_where('user', ['id' => $id])->row_array();
 		customView('forms/dosen', $data);
 	}
-
 	public function dosen_delete()
 	{
 		$data['base'] = 'dosen';
@@ -109,5 +108,39 @@ class Admin extends CI_Controller {
         $this->session->set_flashdata('alertForm', 'Hapus data berhasil');
 		$this->session->set_flashdata('alertType', 'success');
         redirect($data['base']);
+	}
+	
+	public function pkl_edit($id)
+	{
+		$data = $this->globalData;
+		$data['base'] = 'pkl';
+		if($this->input->post()){
+			$config['upload_path']	= './files';
+			$config['allowed_types'] = 'pdf';
+			$file_data = [];
+			foreach ($_FILES as $key => $value) {
+				if($value['size'] > 0){
+					$file = $_FILES[$key]['name'];
+					$this->load->library('upload');
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$file_data[$key] = '';
+					} else {
+						$file_data[$key] = $this->upload->data('file_name');
+					}
+				}
+			}
+			$form = array_merge(
+				[
+					'id_dosen' => $this->input->post('id_dosen'),
+					'status' => 2
+				],
+				$file_data
+			);
+			$this->db->where(['id' => $id])->update($data['base'], $form);
+			$this->session->set_flashdata('alertForm', 'Edit Dosen berhasil');
+			$this->session->set_flashdata('alertType', 'success');
+			redirect($data['base']);
+		}
 	}
 }
