@@ -12,12 +12,6 @@ $route['dashboard'] = 'Logged/index';
 $route['profile/edit'] = 'Logged/profile_edit';
 $route['profile/change-password'] = 'Logged/profile_change_password';
 
-//$route['program'] = 'Mahasiswa/program';
-//$route['program/add'] = 'Mahasiswa/program_add';
-//$route['program/detail/(:num)'] = 'Mahasiswa/program_detail/$1';
-//$route['program/edit/(:num)'] = 'Mahasiswa/program_edit/$1';
-//$route['program/delete'] = 'Mahasiswa/program_delete';
-
 $route['dosen'] = 'Admin/dosen';
 $route['dosen/add'] = 'Admin/dosen_add';
 $route['dosen/detail/(:num)'] = 'Admin/dosen_detail/$1';
