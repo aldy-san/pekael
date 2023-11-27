@@ -1,3 +1,10 @@
+<?php if($this->session->userdata('user')): ?>
+<section class="pb-3 text-center mt-auto">
+	<small class="text-secondary">
+	Teknik Industri UPN | All Right Reserved
+	</small>
+</section>
+<?php endif; ?>
 </main><!-- End #main -->
 <!--<footer id="footer" class="footer"></footer>-->
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

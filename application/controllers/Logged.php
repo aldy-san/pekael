@@ -16,6 +16,13 @@ class Logged extends CI_Controller {
 			'user' => $user
         ];
     }
+	public function logout()
+	{
+        if ($this->session->userdata('user')){
+            $this->session->unset_userdata('user');
+        }
+        redirect('');
+	}
 	public function index()
 	{
 		$data = $this->globalData;

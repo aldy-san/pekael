@@ -24,22 +24,18 @@
 </head>
 <body>
   <header id="header" class="header fixed-top d-flex align-items-center">
-    <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
-        <img src="<?= base_url('assets/cms/img/logo.png'); ?>" alt="">
-      </a>
-  		<?php if($withSidebar): ?>
-      	<i class="bi bi-list toggle-sidebar-btn"></i>
-	 	<?php endif ?>
-    </div>
-  		<?php if(isset($user)): ?>
+		<div class="d-flex align-items-center w-100 <?= isset($user) ? '': 'container'; ?>">
+			<div class="d-flex align-items-center justify-content-between">
+				<a href="<?= base_url(''); ?>" class="logo d-flex align-items-center">
+					<img src="<?= base_url('assets/cms/img/logo.png'); ?>" alt="">
+				</a>
+				<?php if($withSidebar): ?>
+					<i class="bi bi-list toggle-sidebar-btn"></i>
+			 <?php endif ?>
+			</div>
+			<?php if(isset($user)): ?>
 			<nav class="header-nav ms-auto">
 				<ul class="d-flex align-items-center">
-					<li class="nav-item d-block d-lg-none">
-						<a class="nav-link nav-icon search-bar-toggle " href="#">
-							<i class="bi bi-search"></i>
-						</a>
-					</li>
 					<li class="nav-item dropdown pe-3">
 						<a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
 							<img src="<?= $user['photo'] ? base_url('photos/'.$user['photo']) : base_url('assets/cms/img/img-placeholder.png'); ?>" alt="Profile" class="object-fit-cover rounded-circle" style="aspect-ratio:1;">
@@ -68,13 +64,17 @@
 									<span>Sign Out</span>
 								</a>
 							</li>
-
 						</ul>
 					</li>
 				</ul>
 			</nav>
+			<?php else: ?>
+			<div class="d-flex ms-auto ">
+				<a href="<?= base_url('login'); ?>" class="btn btn-primary me-2">Masuk</a>
+				<a href="<?= base_url('register'); ?>" class="btn btn-ghost-primary">Daftar</a>
+			</div>
 			<?php endif;?>
-
+		</div>
   </header>
 
   <!-- ======= Sidebar ======= -->

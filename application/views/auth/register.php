@@ -1,9 +1,9 @@
 <main>
     <div class="container">
       <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-        <div class="container">
+        <div class="container mt-4">
           <div class="row justify-content-center">
-            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+            <div class="col-lg-8 d-flex flex-column align-items-center justify-content-center">
         		<?php if ($this->session->flashdata('alertForm')): ?>
 				<div class="alert alert-danger alert-dismissible fade show" role="alert">
 					<?= $this->session->flashdata('alertForm'); ?>
@@ -17,14 +17,14 @@
 							<p class="text-center small">Masukkan data anda untuk buat akun</p>
 						</div>
 						<form action="<?=base_url('register')?>" method="POST" novalidate class="row g-3 needs-validation">
-							<div class="col-12">
+							<div class="col-5">
 								<label for="username" class="form-label">Username (NPM)</label>
 								<div class="input-group has-validation">
 									<input type="text" name="username" class="form-control" id="username" required>
 									<div class="invalid-feedback">Masukkan username!</div>
 								</div>
 							</div>
-							<div class="col-12">
+							<div class="col-7">
 								<label for="name" class="form-label">Nama Lengkap</label>
 								<div class="input-group has-validation">
 									<input type="text" name="name" class="form-control" id="name" required>
@@ -38,12 +38,12 @@
 									<div class="invalid-feedback">Masukkan email yang benar!</div>
 								</div>
 							</div>
-							<div class="col-12">
+							<div class="col-6">
 								<label for="password" class="form-label">Password</label>
 								<input type="password" name="password" class="form-control" id="password" required>
 								<div class="invalid-feedback">Masukkan password!</div>
 							</div>
-							<div class="col-12">
+							<div class="col-6">
 								<label for="confirm-password" class="form-label">Konfirmasi Password</label>
 								<input type="password" name="confirm-password" class="form-control" id="confirm-password" required>
 								<div class="invalid-feedback">Masukkan konfirmasi password!</div>

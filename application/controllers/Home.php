@@ -2,11 +2,19 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Home extends CI_Controller {
-	public function logout()
+	public $globalData;
+	public function __construct() {
+        parent::__construct();
+		if ($this->session->userdata('user')) {
+			redirect('dashboard');
+		}
+		$this->globalData = [
+            'withSidebar' => false,
+        ];
+    }
+	public function index()
 	{
-        if ($this->session->userdata('user')){
-            $this->session->unset_userdata('user');
-        }
-        redirect(base_url('login'));
+		$data = $this->globalData;
+		customView('index', $data);
 	}
 }
