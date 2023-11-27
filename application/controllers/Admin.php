@@ -22,7 +22,7 @@ class Admin extends CI_Controller {
 	{
 		$data = $this->globalData;
 		$data['base'] = 'dosen';
-		$data['data'] = $this->db->order_by('id', 'DESC')->get_where('user', ['role' => 'dosen'])->result_array();
+		$data['data'] = $this->db->select('u.*, COUNT(u.id) as total')->join('pkl p', 'p.id_dosen = u.id', 'left')->order_by('u.id', 'DESC')->group_by('u.id,p.id_mahasiswa')->get_where('user u', ['role' => 'dosen', 'p.status !=' => 4])->result_array();
 		$data['title'] = "Dosen";
 		$data['columns'] = [
 			[
@@ -38,6 +38,11 @@ class Admin extends CI_Controller {
 			[
 				'title' => 'Email',
 				'key' => 'email',
+				'type' => 'string'
+			],
+			[
+				'title' => 'Total Bimbingan',
+				'key' => 'total',
 				'type' => 'string'
 			],
 		];
