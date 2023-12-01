@@ -89,16 +89,24 @@ class Logged extends CI_Controller {
 		if($data['user']['role'] === 'mahasiswa'){
 			//$data['access'] = ['EDIT'];
 
-			$data['data'] = $this->db->select('p.*, d.name as nama_dosen, s.status as status')->join('user d', 'd.id = p.id_dosen', 'left')->join('status s', 's.id = p.status', 'left')->order_by('id', 'DESC')->get_where($data['base'].' p', ['id_mahasiswa' => $this->globalData['user']['id']])->result_array();
-			$inserted = [[
-				'title' => 'Dosen Pembimbing',
-				'key' => 'nama_dosen',
-				'type' => 'string',
-				'default' => '(Belum ada)'
-			]];
+			$data['data'] = $this->db->select('p.*, d.name as nama_dosen, pe.name as nama_penguji, s.status as status')->join('user d', 'd.id = p.id_dosen', 'left')->join('user pe', 'pe.id = p.id_penguji', 'left')->join('status s', 's.id = p.status', 'left')->order_by('id', 'DESC')->get_where($data['base'].' p', ['id_mahasiswa' => $this->globalData['user']['id']])->result_array();
+			$inserted = [
+				[
+					'title' => 'Dosen Pembimbing',
+					'key' => 'nama_dosen',
+					'type' => 'string',
+					'default' => '(Belum ada)'
+				],
+				[
+					'title' => 'Dosen Penguji',
+					'key' => 'nama_penguji',
+					'type' => 'string',
+					'default' => '(Belum ada)'
+				]
+			];
 		} else if($data['user']['role'] === 'admin'){
 			$data['access'] = ['EDIT'];
-			$data['data'] = $this->db->select('p.*, m.name as nama_mahasiswa, d.name as nama_dosen, s.status as status')->join('user m', 'm.id = p.id_mahasiswa', 'left')->join('user d', 'd.id = p.id_dosen', 'left')->join('status s', 's.id = p.status', 'left')->get($data['base'].' p')->result_array();
+			$data['data'] = $this->db->select('p.*, m.name as nama_mahasiswa, d.name as nama_dosen, pe.name as nama_penguji, s.status as status')->join('user m', 'm.id = p.id_mahasiswa', 'left')->join('user d', 'd.id = p.id_dosen', 'left')->join('user pe', 'pe.id = p.id_penguji', 'left')->join('status s', 's.id = p.status', 'left')->get($data['base'].' p')->result_array();
 			$inserted = [
 				[
 					'title' => 'Nama Mahasiswa',
@@ -111,17 +119,37 @@ class Logged extends CI_Controller {
 					'key' => 'nama_dosen',
 					'type' => 'string',
 					'default' => '(Belum ada)'
+				],
+				[
+					'title' => 'Dosen Penguji',
+					'key' => 'nama_penguji',
+					'type' => 'string',
+					'default' => '(Belum ada)'
 				]
 			];
 		} else {
 			$data['access'] = ['DETAIL'];
-			$data['data'] = $this->db->select('p.*, m.name as nama_mahasiswa, s.status as status')->join('user m', 'm.id = p.id_mahasiswa', 'left')->join('status s', 's.id = p.status', 'left')->order_by('id', 'DESC')->get_where($data['base'].' p', ['id_dosen' => $this->globalData['user']['id']])->result_array();
-			$inserted = [[
-				'title' => 'Nama Mahasiswa',
-				'key' => 'nama_mahasiswa',
-				'type' => 'string',
-				'default' => '(Belum ada)'
-			]];
+			$data['data'] = $this->db->select('p.*, m.name as nama_mahasiswa, d.name as nama_dosen, pe.name as nama_penguji, s.status as status')->join('user m', 'm.id = p.id_mahasiswa', 'left')->join('user d', 'd.id = p.id_dosen', 'left')->join('user pe', 'pe.id = p.id_penguji', 'left')->join('status s', 's.id = p.status', 'left')->order_by('id', 'DESC')->where(['id_dosen' => $this->globalData['user']['id']])->or_where(['id_penguji' => $this->globalData['user']['id']])->get($data['base'].' p')->result_array();
+			$inserted = [
+				[
+					'title' => 'Nama Mahasiswa',
+					'key' => 'nama_mahasiswa',
+					'type' => 'string',
+					'default' => '(Belum ada)',
+				],
+				[
+					'title' => 'Dosen Pembimbing',
+					'key' => 'nama_dosen',
+					'type' => 'string',
+					'default' => '(Belum ada)'
+				],
+				[
+					'title' => 'Dosen Penguji',
+					'key' => 'nama_penguji',
+					'type' => 'string',
+					'default' => '(Belum ada)'
+				]
+			];
 		}
 
 		//$data['data'] = $this->db->select('*, m.name as nama_mahasiswa, d.name as nama_dosen')->join('user m', 'm.id = p.id_mahasiswa')->join('user d', 'd.id = p.id_dosen')->get_where($data['base'].' p', ['id_mahasiswa' => $this->globalData['user']['id']])->result_array();
@@ -168,7 +196,7 @@ class Logged extends CI_Controller {
 				'title' => 'Data Seminar',
 				'key' => '#seminarModal',
 				'type' => 'modal',
-				'condition' => 'DILAPORKAN,SELESAI',
+				'condition' => 'DILAPORKAN,DIUJI,SELESAI',
 				'func' => 'tes',
 				'default' => '(Belum ada)'
 			],

@@ -26,5 +26,6 @@ $route['pkl/delete'] = 'Mahasiswa/pkl_delete';
 $route['pkl/add'] = 'Mahasiswa/pkl_add';
 
 $route['pkl/edit_dosen/(:num)'] = 'Admin/pkl_edit/$1';
+$route['pkl/edit_penguji/(:num)'] = 'Admin/pkl_edit_penguji/$1';
 $route['pkl/edit_laporan/(:num)'] = 'Mahasiswa/pkl_edit_laporan/$1';
 $route['pkl/edit_nilai/(:num)'] = 'Mahasiswa/pkl_edit_nilai/$1';

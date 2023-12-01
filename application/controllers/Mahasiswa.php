@@ -124,7 +124,7 @@ class Mahasiswa extends CI_Controller {
 			}
 			$form = array_merge(
 				[
-					'status' => 4
+					'status' => 5
 				],
 				$file_data
 			);

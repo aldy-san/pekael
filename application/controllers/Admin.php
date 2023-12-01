@@ -66,7 +66,6 @@ class Admin extends CI_Controller {
 				$form = [
 					'username' => $this->input->post('username'),
 					'name' => $this->input->post('name'),
-					'email' => $this->input->post('email'),
 					'password' => md5($this->input->post('password')),
 					'role' => 'dosen'
 				];
@@ -85,7 +84,7 @@ class Admin extends CI_Controller {
 	{
 		$data = $this->globalData;
 		$data['base'] = 'dosen';
-		$data['title'] = 'Detail Program';
+		$data['title'] = 'Detail Dosen';
 		$data['isEdit'] = false;
 		$data['data'] = $this->db->get_where('user', ['id' => $id])->row_array();
 		customView('forms/dosen', $data);
@@ -94,13 +93,12 @@ class Admin extends CI_Controller {
 	{
 		$data = $this->globalData;
 		$data['base'] = 'dosen';
-		$data['title'] = 'Edit Program';
+		$data['title'] = 'Edit Dosen';
 		$data['isEdit'] = true;
 		if($this->input->post()){
 			$form = [
 				'username' => $this->input->post('username'),
 				'name' => $this->input->post('name'),
-				'email' => $this->input->post('email'),
 				'password' => md5($this->input->post('password')),
 				'role' => 'dosen'
 			];
@@ -148,6 +146,21 @@ class Admin extends CI_Controller {
 				],
 				$file_data
 			);
+			$this->db->where(['id' => $id])->update($data['base'], $form);
+			$this->session->set_flashdata('alertForm', 'Edit Dosen berhasil');
+			$this->session->set_flashdata('alertType', 'success');
+			redirect($data['base']);
+		}
+	}
+	public function pkl_edit_penguji($id)
+	{
+		$data = $this->globalData;
+		$data['base'] = 'pkl';
+		if($this->input->post()){
+			$form = [
+				'id_penguji' => $this->input->post('id_penguji'),
+				'status' => 4
+			];
 			$this->db->where(['id' => $id])->update($data['base'], $form);
 			$this->session->set_flashdata('alertForm', 'Edit Dosen berhasil');
 			$this->session->set_flashdata('alertType', 'success');

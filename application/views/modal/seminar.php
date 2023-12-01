@@ -37,6 +37,12 @@
 						<a href="" target="_blank" data-name="berkas_seminar" class="btn btn-info text-white mt-2">Lihat File</a>
 					</div>
 				</div>
+				<div class="row col-md-12 mt-3">
+					<label for="formFile" class="col-sm-3 col-form-label">Logbook</label>
+					<div class="col-sm-9">
+						<a href="" target="_blank" data-name="logbook" class="btn btn-info text-white mt-2">Lihat File</a>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="modal-footer">

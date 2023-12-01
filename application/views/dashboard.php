@@ -34,10 +34,12 @@
 								<div class="col-lg-3 col-md-4 label">Username</div>
 								<div class="col-lg-9 col-md-8"><?= $user['username']; ?></div>
 							</div>
+							<?php if ($user['role'] === 'mahasiswa'):?>
 							<div class="row">
 								<div class="col-lg-3 col-md-4 label">Email</div>
 								<div class="col-lg-9 col-md-8"><?= $user['email']; ?></div>
 							</div>
+							<?php endif; ?>
 						</div>
 						<div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 								<?= form_open_multipart('profile/edit', array('novalidate' => '', 'class' => 'row g-3 needs-validation')) ?>
@@ -59,12 +61,14 @@
 										<input name="name" type="text" class="form-control" id="name" value="<?= $user['name']; ?>" required>
 									</div>
 								</div>
+								<?php if ($user['role'] === 'mahasiswa'):?>
 								<div class="row mb-3">
 									<label for="email" class="col-md-4 col-lg-3 col-form-label">Email</label>
 									<div class="col-md-8">
 										<input name="email" type="email" class="form-control" id="email" value="<?= $user['email']; ?>" required>
 									</div>
 								</div>
+								<?php endif; ?>
 								<div class="text-center">
 									<button type="submit" class="btn btn-primary">Simpan</button>
 								</div>

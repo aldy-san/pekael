@@ -73,6 +73,7 @@
 					<div class="col-md-8">
 						<div class="form-floating mb-3">
 						<select class="form-select" name="id_dosen" id="floatingSelect" <?= $isEdit && $user['role'] === 'admin' && $data['status'] <= 2 ? '': 'disabled'; ?>>
+							<option value="" disabled <?= $data['id_dosen'] ? '' : 'selected'; ?>>...</option>
 							<?php foreach ($dosen as $value) :?>
 							<option value="<?= $value['id']; ?>" <?= $value['id'] === $data['id_dosen'] ? 'selected' : ''; ?>><?= $value['name']; ?></option>
 							<?php endforeach; ?>
@@ -161,7 +162,45 @@
 							<?php endif; ?>
 						</div>
 					</div>
+					<div class="row col-md-8 mt-3">
+						<label for="formFile" class="col-sm-3 col-form-label">Logbook</label>
+						<div class="col-sm-9">
+							<?php if($isEdit && $user['role'] === 'mahasiswa' && $data['status'] <= 3) :?>
+							<input class="form-control" type="file" id="formFile" name="logbook" accept="application/pdf" <?= isset($data) && $data['logbook'] ? '' : 'required'; ?>>
+							<?php endif; ?>
+							<?php if(isset($data) && $data['logbook']) :?>
+							<a href="<?= base_url('/files/'.$data['logbook']); ?>" target="_blank" class="btn btn-info text-white mt-2">Lihat File</a>
+							<?php else: ?>
+							<small class="text-danger mt-2 d-flex">(Belum ada)</small>
+							<?php endif; ?>
+						</div>
+					</div>
 					<?php if ($isEdit && $user['role'] === 'mahasiswa' && $data['status'] <= 3): ?>
+					<div>
+					<button type="submit" class="btn btn-primary">Submit</button>
+					</div>
+					<?php endif; ?>
+					<?= form_close(); ?>
+				</div>
+			</div>
+			<?php endif; ?>
+			<?php if (isset($data) && $data['status'] >= 3): ?>
+			<div class="card p-3">
+				<div class="card-body">
+					<h5 class="card-title">Dosen Pembimbing</h5>
+					<?= form_open_multipart(base_url($base.'/edit_penguji/'.$data['id']), array('onkeydown' => "return event.key != 'Enter';", 'novalidate' => '', 'class' => 'row g-3 needs-validation')) ?>
+					<div class="col-md-8">
+						<div class="form-floating mb-3">
+						<select class="form-select" name="id_penguji" id="floatingSelect" <?= $isEdit && $user['role'] === 'admin' && $data['status'] <= 4 ? '': 'disabled'; ?>>
+							<option value="" disabled <?= $data['id_penguji'] ? '' : 'selected'; ?>>...</option>
+							<?php foreach ($dosen as $value) :?>
+							<option value="<?= $value['id']; ?>" <?= $value['id'] === $data['id_penguji'] ? 'selected' : ''; ?>><?= $value['name']; ?></option>
+							<?php endforeach; ?>
+						</select>
+						<label for="floatingSelect">Dosen Pembimbing</label>
+						</div>
+					</div>
+					<?php if ($isEdit && $user['role'] === 'admin' && $data['status'] <= 4): ?>
 					<div>
 					<button type="submit" class="btn btn-primary">Submit</button>
 					</div>
@@ -171,10 +210,10 @@
 				</div>
 			</div>
 			<?php endif; ?>
-			<?php if (isset($data) && $data['status'] >= 3): ?>
+			<?php if (isset($data) && $data['status'] >= 4): ?>
 			<div class="card p-3">
 				<div class="card-body">
-					<h5 class="card-title">Data Nilai 
+					<h5 class="card-title">Data Nilai
 						<?php if($user['role'] === 'mahasiswa'): ?>
 						<small class="text-danger">(Upload Nilai jika sudah menyelesaikan seminar)</small>
 						<?php endif; ?>
@@ -184,7 +223,7 @@
 					<div class="row col-md-12 mt-3">
 						<label for="formFile" class="col-sm-3 col-form-label">Berita Acara</label>
 						<div class="col-sm-9">
-							<?php if($isEdit && $data['status'] <= 3) :?>
+							<?php if($isEdit && $user['role'] === 'mahasiswa' && $data['status'] <= 4) :?>
 							<input class="form-control" type="file" id="formFile" name="berita_acara" accept="application/pdf" <?= isset($data) && $data['berita_acara'] ? '' : 'required'; ?>>
 							<?php endif; ?>
 							<?php if(isset($data) && $data['berita_acara']) :?>
@@ -197,7 +236,7 @@
 					<div class="row col-md-12 mt-3">
 						<label for="formFile" class="col-sm-3 col-form-label">Nilai Dosen Pembimbing</label>
 						<div class="col-sm-9">
-							<?php if($isEdit && $data['status'] <= 3) :?>
+							<?php if($isEdit && $user['role'] === 'mahasiswa' && $data['status'] <= 4) :?>
 							<input class="form-control" type="file" id="formFile" name="nilai_dosen" accept="application/pdf" <?= isset($data) && $data['nilai_dosen'] ? '' : 'required'; ?>>
 							<?php endif; ?>
 							<?php if(isset($data) && $data['nilai_dosen']) :?>
@@ -210,7 +249,7 @@
 					<div class="row col-md-12 mt-3">
 						<label for="formFile" class="col-sm-3 col-form-label">Nilai Perusahaan</label>
 						<div class="col-sm-9">
-							<?php if($isEdit && $data['status'] <= 3) :?>
+							<?php if($isEdit && $user['role'] === 'mahasiswa' && $data['status'] <= 4) :?>
 							<input class="form-control" type="file" id="formFile" name="nilai_perusahaan" accept="application/pdf" <?= isset($data) && $data['nilai_perusahaan'] ? '' : 'required'; ?>>
 							<?php endif; ?>
 							<?php if(isset($data) && $data['nilai_perusahaan']) :?>
@@ -220,7 +259,7 @@
 							<?php endif; ?>
 						</div>
 					</div>
-					<?php if ($isEdit  && $data['status'] <= 3): ?>
+					<?php if ($isEdit && $user['role'] === 'mahasiswa' && $data['status'] <= 4): ?>
 					<div>
 					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal">Submit</button>
 					<div class="modal fade" id="confirmModal" tabindex="-1">
@@ -247,7 +286,6 @@
 					</div>
 					<?php endif; ?>
 					<?= form_close(); ?>
-				</form>
 				</div>
 			</div>
 			<?php endif; ?>
