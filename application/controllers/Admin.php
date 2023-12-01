@@ -22,7 +22,12 @@ class Admin extends CI_Controller {
 	{
 		$data = $this->globalData;
 		$data['base'] = 'dosen';
-		$data['data'] = $this->db->select('u.*, COUNT(u.id) as total')->join('pkl p', 'p.id_dosen = u.id', 'left')->order_by('u.id', 'DESC')->group_by('u.id,p.id_mahasiswa')->get_where('user u', ['role' => 'dosen', 'p.status !=' => 4])->result_array();
+		$data['data'] = $this->db->select('u.*, COUNT(u.id) as total, p.status')->join('pkl p', 'p.id_dosen = u.id', 'left')->order_by('u.id', 'DESC')->group_by('u.id,p.id_mahasiswa')->where("role = 'dosen' AND (p.status != 4 OR p.status is NULL)")->get('user u')->result_array();
+		foreach ($data['data'] as $key => $value) {
+			if(!$value['status']){
+				$data['data'][$key]['total'] = "0";
+			}
+		}
 		$data['title'] = "Dosen";
 		$data['columns'] = [
 			[
@@ -43,7 +48,8 @@ class Admin extends CI_Controller {
 			[
 				'title' => 'Total Bimbingan',
 				'key' => 'total',
-				'type' => 'string'
+				'type' => 'string',
+				'default' => '0'
 			],
 		];
 		customView('layouts/table_page', $data);
