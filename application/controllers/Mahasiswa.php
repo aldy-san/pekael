@@ -7,37 +7,114 @@ class Mahasiswa extends CI_Controller {
 
         parent::__construct();
 		if ($this->session->userdata('user')) {
-			$user = $this->db->get_where('user', ['username' => $this->session->userdata('user')['username']])->row_array();
+			$user = $this->db->get_where('user', ['email' => $this->session->userdata('user')['email']])->row_array();
 			if(!$user || $user['role'] != 'mahasiswa') redirect('dashboard');
 		}else{
 			redirect('login');
 		}
-
 		$this->globalData = [
             'withSidebar' => true,
             'mainClass' => 'main',
 			'user' => $user
         ];
     }
-	public function index()
+	public function berkas()
 	{
 		$data = $this->globalData;
-		customView('mahasiswa/dashboard', $data);
+		$data['isEdit'] = false;
+		$data['list_file'] = [
+			[
+				'title' => 'Form Lab',
+				'key' => 'form_lab'
+			],
+			[
+				'title' => 'Transkrip',
+				'key' => 'transkrip'
+			],
+			[
+				'title' => 'KRS',
+				'key' => 'krs'
+			],
+			[
+				'title' => 'Nilai Laporan PKL',
+				'key' => 'nilai_laporan_pkl'
+			],
+			[
+				'title' => 'Nilai Laporan MSIB',
+				'key' => 'nilai_laporan_msib'
+			],
+			[
+				'title' => 'Jurnal Nasional',
+				'key' => 'jurnal_nasional'
+			],
+			[
+				'title' => 'Jurnal Internasional',
+				'key' => 'jurnal_internasional'
+			],
+			[
+				'title' => 'Review Jurnal',
+				'key' => 'review_jurnal'
+			],
+			[
+				'title' => 'Point SKPM',
+				'key' => 'point_skpm'
+			],
+		];
+		$data['base'] = 'berkas';
+		$data['data'] = $this->db->get_where('berkas_syarat', ['id_mahasiswa' => $data['user']['id']])->row_array();
+		//var_dump($data['data']);die;
+		customView('forms/berkas', $data);
 	}
-
-	public function pkl_add()
+	public function berkas_edit()
 	{
 		$data = $this->globalData;
-		$data['base'] = 'pkl';
-		$data['title'] = 'Ajukan PKL';
 		$data['isEdit'] = true;
-        if($this->input->post()){
+		$data['list_file'] = [
+			[
+				'title' => 'Form Lab',
+				'key' => 'form_lab'
+			],
+			[
+				'title' => 'Transkrip',
+				'key' => 'transkrip'
+			],
+			[
+				'title' => 'KRS',
+				'key' => 'krs'
+			],
+			[
+				'title' => 'Nilai Laporan PKL',
+				'key' => 'nilai_laporan_pkl'
+			],
+			[
+				'title' => 'Nilai Laporan MSIB',
+				'key' => 'nilai_laporan_msib'
+			],
+			[
+				'title' => 'Jurnal Nasional',
+				'key' => 'jurnal_nasional'
+			],
+			[
+				'title' => 'Jurnal Internasional',
+				'key' => 'jurnal_internasional'
+			],
+			[
+				'title' => 'Review Jurnal',
+				'key' => 'review_jurnal'
+			],
+			[
+				'title' => 'Point SKPM',
+				'key' => 'point_skpm'
+			],
+		];
+		$data['base'] = 'berkas';
+		if($this->input->post()){
 			$config['upload_path']	= './files';
 			$config['allowed_types'] = 'pdf';
 			$file_data = [];
 			foreach ($_FILES as $key => $value) {
 				if($value['size'] > 0){
-					$file = $_FILES['file']['name'];
+					$file = $_FILES[$key]['name'];
 					$this->load->library('upload');
 					$this->upload->initialize($config);
 					if (!$this->upload->do_upload($key)) {
@@ -49,98 +126,21 @@ class Mahasiswa extends CI_Controller {
 			}
 			$form = array_merge(
 				[
-					'id_mahasiswa' => $this->globalData['user']['id'],
-					'perusahaan' => $this->input->post('perusahaan'),
-					'periode_mulai' => $this->input->post('periode_mulai'),
-					'periode_akhir' => $this->input->post('periode_akhir'),
+					'id_mahasiswa' => $data['user']['id']
 				],
 				$file_data
 			);
-			$this->db->insert($data['base'], $form);
-			$this->session->set_flashdata('alertForm', 'Tambah data berhasil');
-			$this->session->set_flashdata('alertType', 'success');
-			redirect($data['base']);
+			if($data['data'] !== NULL){
+				$this->db->where(['id_mahasiswa' => $data['user']['id']])->update('berkas_syarat', $form);
+			}else {
+				$this->db->insert('berkas_syarat', $form);
+			}
+			redirect('berkas');
 		}
-		$data['dosen'] = $this->db->order_by('id', 'DESC')->get_where('user', ['role' => 'dosen'])->result_array();
-		customView('forms/pkl', $data);
+		$data['data'] = $this->db->get_where('berkas_syarat', ['id_mahasiswa' => $data['user']['id']])->row_array();
+		//var_dump($data['data']);die;
+		customView('forms/berkas', $data);
 	}
-
 	
 
-	public function pkl_edit_laporan($id)
-	{
-		$data = $this->globalData;
-		$data['base'] = 'pkl';
-		if($this->input->post()){
-			$config['upload_path']	= './files';
-			$config['allowed_types'] = 'pdf';
-			$file_data = [];
-			foreach ($_FILES as $key => $value) {
-				if($value['size'] > 0){
-					$file = $_FILES[$key]['name'];
-					$this->load->library('upload');
-					$this->upload->initialize($config);
-					if (!$this->upload->do_upload($key)) {
-						$file_data[$key] = '';
-					} else {
-						$file_data[$key] = $this->upload->data('file_name');
-					}
-				}
-			}
-			$form = array_merge(
-				[
-					'judul_laporan' => $this->input->post('judul_laporan'),
-					'tanggal_seminar' => $this->input->post('tanggal_seminar'),
-					'ruang_seminar' => $this->input->post('ruang_seminar'),
-					'status' => 3
-				],
-				$file_data
-			);
-			$this->db->where(['id' => $id])->update($data['base'], $form);
-			$this->session->set_flashdata('alertForm', 'Edit Laporan berhasil');
-			$this->session->set_flashdata('alertType', 'success');
-			redirect($data['base']);
-		}
-	}
-	public function pkl_edit_nilai($id)
-	{
-		$data = $this->globalData;
-		$data['base'] = 'pkl';
-		if($this->input->post()){
-			$config['upload_path']	= './files';
-			$config['allowed_types'] = 'pdf';
-			$file_data = [];
-			foreach ($_FILES as $key => $value) {
-				if($value['size'] > 0){
-					$file = $_FILES[$key]['name'];
-					$this->load->library('upload');
-					$this->upload->initialize($config);
-					if (!$this->upload->do_upload($key)) {
-						$file_data[$key] = '';
-					} else {
-						$file_data[$key] = $this->upload->data('file_name');
-					}
-				}
-			}
-			$form = array_merge(
-				[
-					'status' => 5
-				],
-				$file_data
-			);
-			$this->db->where(['id' => $id])->update($data['base'], $form);
-			$this->session->set_flashdata('alertForm', 'Tambah Nilai berhasil');
-			$this->session->set_flashdata('alertType', 'success');
-			redirect($data['base']);
-		}
-	}
-
-	public function pkl_delete()
-	{
-		$data['base'] = 'pkl';
-		$this->db->where(['id' => $this->input->post('id')])->delete($data['base']);
-        $this->session->set_flashdata('alertForm', 'Hapus data berhasil');
-		$this->session->set_flashdata('alertType', 'success');
-        redirect($data['base']);
-	}
 }

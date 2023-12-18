@@ -7,7 +7,7 @@ class Auth extends CI_Controller {
 
         parent::__construct();
 		if ($this->session->userdata('user')) {
-			$user = $this->db->get_where('user', ['username' => $this->session->userdata('user')['username']])->row_array();
+			$user = $this->db->get_where('user', ['email' => $this->session->userdata('user')['email']])->row_array();
 			redirect('dashboard');
 		}
         $this->globalData = [
@@ -17,15 +17,15 @@ class Auth extends CI_Controller {
 	public function login()
 	{
 		if ($this->input->post()){
-			$username = $this->input->post('username');
+			$email = $this->input->post('email');
 			$password = $this->input->post('password');
-			$user = $this->db->get_where('user', ['username' => $username])->row_array();
+			$user = $this->db->get_where('user', ['email' => $email])->row_array();
 			if ($user){
 				if (md5($password) === $user['password']){
 					$this->session->set_flashdata('alertForm', 'Login Berhasil!, Selamat datang '.$user['name']);
 					$this->session->set_flashdata('alertType', 'success');
 					$sessionUser = [
-						'username' => $user['username'],
+						'email' => $user['email'],
 						'role' => $user['role'],
 					];
 					$this->session->set_userdata('user',$sessionUser);
@@ -44,12 +44,14 @@ class Auth extends CI_Controller {
 	public function register()
 	{
 		if ($this->input->post()){
-			$user = $this->db->get_where('user', ['username' => $this->input->post('username')])->row_array();
+			$user = $this->db->get_where('user', ['email' => $this->input->post('email')])->row_array();
 			if(!$user){
 				if ($this->input->post('password') === $this->input->post('confirm-password')){
 					$form = [
-						'username' => $this->input->post('username'),
-						'name' => $this->input->post('name'),
+						'nama' => $this->input->post('nama'),
+						'npm' => $this->input->post('npm'),
+						'prodi' => $this->input->post('prodi'),
+						'angkatan' => $this->input->post('angkatan'),
 						'email' => $this->input->post('email'),
 						'password' => md5($this->input->post('password')),
 						'role' => 'mahasiswa',
@@ -63,7 +65,7 @@ class Auth extends CI_Controller {
 					$this->session->set_flashdata('alertForm', 'Konfirmasi Password tidak sama');
 				}
 			}else {
-					$this->session->set_flashdata('alertForm', 'Username sudah terdaftar');
+					$this->session->set_flashdata('alertForm', 'Email sudah terdaftar');
 			}
 		}
 		$data = $this->globalData;
