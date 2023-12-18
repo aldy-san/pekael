@@ -17,6 +17,7 @@
                         </div>
                     </div>
                 </div>
+				<?php if($user['role'] === 'mahasiswa'): ?>
 				<div class="card">
 					<div class="card-body">
 						<h3>Edit Profil</h3>
@@ -53,6 +54,7 @@
 						</form>
 					</div>
 				</div>
+				<?php endif; ?>
 				<div class="card">
 					<div class="card-body">
 						<h3>Edit Password</h3>

@@ -14,3 +14,10 @@ $route['profile/change-password'] = 'Logged/profile_change_password';
 
 $route['berkas'] = 'Mahasiswa/berkas';
 $route['berkas/edit'] = 'Mahasiswa/berkas_edit';
+
+
+$route['pengajuan'] = 'Logged/pengajuan';
+$route['pengajuan/add'] = 'Mahasiswa/pengajuan_add';
+$route['pengajuan/detail/(:num)'] = 'Mahasiswa/pengajuan_detail/$1';
+$route['pengajuan/edit/(:num)'] = 'Mahasiswa/pengajuan_edit/$1';
+$route['pengajuan/delete'] = 'Mahasiswa/pengajuan_delete';

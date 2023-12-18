@@ -63,6 +63,7 @@ class Mahasiswa extends CI_Controller {
 		$data['base'] = 'berkas';
 		$data['data'] = $this->db->get_where('berkas_syarat', ['id_mahasiswa' => $data['user']['id']])->row_array();
 		//var_dump($data['data']);die;
+		$withEdit = true;
 		customView('forms/berkas', $data);
 	}
 	public function berkas_edit()
@@ -141,6 +142,102 @@ class Mahasiswa extends CI_Controller {
 		//var_dump($data['data']);die;
 		customView('forms/berkas', $data);
 	}
-	
 
+	public function pengajuan_add()
+	{
+		$data = $this->globalData;
+		$data['base'] = 'pengajuan';
+		$data['title'] = 'Ajukan Judul';
+		$data['isEdit'] = true;
+        if($this->input->post()){
+			$config['upload_path']	= './files';
+			$config['allowed_types'] = 'pdf';
+			$file_data = [];
+			foreach ($_FILES as $key => $value) {
+				if($value['size'] > 0){
+					$file = $_FILES['file']['name'];
+					$this->load->library('upload');
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$file_data[$key] = '';
+					} else {
+						$file_data[$key] = $this->upload->data('file_name');
+					}
+				}
+			}
+			$form = array_merge(
+				[
+					'id_mahasiswa' => $this->globalData['user']['id'],
+					'judul' => $this->input->post('judul'),
+					'permasalahan' => $this->input->post('permasalahan'),
+					'tanggal' => $this->input->post('tanggal'),
+					'status' => "diajukan"
+				],
+				$file_data
+			);
+			$this->db->insert($data['base'], $form);
+			$this->session->set_flashdata('alertForm', 'Tambah data berhasil');
+			$this->session->set_flashdata('alertType', 'success');
+			redirect($data['base']);
+		}
+		customView('forms/pengajuan', $data);
+	}
+	public function pengajuan_edit($id)
+	{
+		$data = $this->globalData;
+		$data['base'] = 'pengajuan';
+		$data['title'] = 'Edit Pengajuan Judul';
+		$data['isEdit'] = true;
+        if($this->input->post()){
+			$config['upload_path']	= './files';
+			$config['allowed_types'] = 'pdf';
+			$file_data = [];
+			foreach ($_FILES as $key => $value) {
+				if($value['size'] > 0){
+					$file = $_FILES['file']['name'];
+					$this->load->library('upload');
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$file_data[$key] = '';
+					} else {
+						$file_data[$key] = $this->upload->data('file_name');
+					}
+				}
+			}
+			$form = array_merge(
+				[
+					'id_mahasiswa' => $this->globalData['user']['id'],
+					'judul' => $this->input->post('judul'),
+					'permasalahan' => $this->input->post('permasalahan'),
+					'tanggal' => $this->input->post('tanggal'),
+					'status' => "diajukan"
+				],
+				$file_data
+			);
+			$this->db->where(['id' => $id])->update($data['base'], $form);
+			$this->session->set_flashdata('alertForm', 'Tambah data berhasil');
+			$this->session->set_flashdata('alertType', 'success');
+			redirect($data['base']);
+		}
+		$data['data'] = $this->db->get_where($data['base'], ['id' => $id])->row_array();
+		customView('forms/pengajuan', $data);
+	}
+	public function pengajuan_detail($id)
+	{
+		$data = $this->globalData;
+		$data['base'] = 'pengajuan';
+		$data['title'] = 'Detail Pengajuan Judul';
+		$data['isEdit'] = false;
+		$data['data'] = $this->db->get_where($data['base'], ['id' => $id])->row_array();
+		customView('forms/pengajuan', $data);
+	}
+	
+	public function pengajuan_delete()
+	{
+		$data['base'] = 'pengajuan';
+		$this->db->where(['id' => $this->input->post('id')])->delete($data['base']);
+        $this->session->set_flashdata('alertForm', 'Hapus data berhasil');
+		$this->session->set_flashdata('alertType', 'success');
+        redirect($data['base']);
+	}
 }
