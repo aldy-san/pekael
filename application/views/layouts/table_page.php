@@ -101,8 +101,6 @@ function modalHandler(target, id) {
 	const data = <?= json_encode($data); ?>;
 	const selected = data.find(item => Number(item.id) === id);
 	const inputs = document.querySelectorAll(target + ' input');
-	console.log(data)
-	console.log(selected)
 	inputs.forEach(item => {
 		item.value = selected[item.name]
 	});

@@ -224,7 +224,7 @@
 						<label for="formFile" class="col-sm-3 col-form-label">Berita Acara</label>
 						<div class="col-sm-9">
 							<?php if($isEdit && $user['role'] === 'mahasiswa' && $data['status'] <= 4) :?>
-							<input class="form-control" type="file" id="formFile" name="berita_acara" accept="application/pdf" <?= isset($data) && $data['berita_acara'] ? '' : 'required'; ?>>
+							<input class="form-control" type="file" id="formFile" name="berita_acara" accept="application/pdf" <?= isset($data) && $data['berita_acara'] ? '' : '	'; ?>>
 							<?php endif; ?>
 							<?php if(isset($data) && $data['berita_acara']) :?>
 							<a href="<?= base_url('/files/'.$data['berita_acara']); ?>" target="_blank" class="btn btn-info text-white mt-2">Lihat File</a>

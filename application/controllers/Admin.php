@@ -41,11 +41,6 @@ class Admin extends CI_Controller {
 				'type' => 'string'
 			],
 			[
-				'title' => 'Email',
-				'key' => 'email',
-				'type' => 'string'
-			],
-			[
 				'title' => 'Total Bimbingan',
 				'key' => 'total',
 				'type' => 'string',
