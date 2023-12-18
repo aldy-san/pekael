@@ -21,3 +21,5 @@ $route['pengajuan/add'] = 'Mahasiswa/pengajuan_add';
 $route['pengajuan/detail/(:num)'] = 'Mahasiswa/pengajuan_detail/$1';
 $route['pengajuan/edit/(:num)'] = 'Mahasiswa/pengajuan_edit/$1';
 $route['pengajuan/delete'] = 'Mahasiswa/pengajuan_delete';
+$route['pengajuan/approve'] = 'Admin/pengajuan_approve';
+$route['pengajuan/reject'] = 'Admin/pengajuan_reject';

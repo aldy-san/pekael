@@ -46,7 +46,7 @@
 		<div class="modal-body">
 			<div class="row g-3">
 				<?php foreach ($list_file as $key => $value) :?>
-				<div class="row col-md-4 mt-3">
+				<div class="row col-md-4 mt-3 text-center">
 					<label for="formFile" class="col-sm-12 col-form-label"><?= $value['title']; ?></label>
 					<div class="col-sm-12">
 						<a href="" target="_blank" data-name="<?= $value['key']; ?>" class="btn btn-info text-white mt-2">Lihat File</a>

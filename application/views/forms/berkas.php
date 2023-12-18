@@ -10,7 +10,7 @@
             </div>
         </div>
     </div>
-	<?= form_open_multipart(base_url($base.'/edit/'), array('onkeydown' => "return event.key != 'Enter';", ' data-parsley-validate' => '', 'class' => 'row g-3')) ?>
+	<?= form_open_multipart(base_url($base.'/edit/'), array('onkeydown' => "return event.key != 'Enter';", 'data-parsley-validate' => '', 'class' => 'row g-3')) ?>
     <section class="section card p-3">
         <div class="row">
 			<input type="hidden" name="trigger">

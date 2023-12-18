@@ -78,7 +78,7 @@ class Logged extends CI_Controller {
 			$data['data'] = $this->db->order_by('id', 'DESC')->get_where($data['base'],['id_mahasiswa' => $data['user']['id']])->result_array();
 			$inserted = [];
 		} else if ($data['user']['role'] === 'admin'){
-			$data['data'] = $this->db->select('pengajuan.*, u.nama as nama_mahasiswa, b.*')->order_by('pengajuan.id', 'DESC')->join('user u', 'u.id = pengajuan.id_mahasiswa', 'left')->join('berkas_syarat b', 'b.id_mahasiswa = pengajuan.id_mahasiswa', 'left')->get_where($data['base'],['status' => 'diajukan'])->result_array();
+			$data['data'] = $this->db->select('pengajuan.*, u.nama as nama_mahasiswa, b.*, pengajuan.id as id')->order_by('pengajuan.id', 'DESC')->join('user u', 'u.id = pengajuan.id_mahasiswa', 'left')->join('berkas_syarat b', 'b.id_mahasiswa = pengajuan.id_mahasiswa', 'left')->get_where($data['base'],[])->result_array();
 			$inserted = [
 				[
 					'title' => 'Nama Mahasiswa',
