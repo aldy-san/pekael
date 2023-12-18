@@ -12,9 +12,4 @@ class Home extends CI_Controller {
             'withSidebar' => false,
         ];
     }
-	public function index()
-	{
-		$data = $this->globalData;
-		customView('index', $data);
-	}
 }

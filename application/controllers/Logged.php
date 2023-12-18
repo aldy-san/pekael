@@ -210,7 +210,7 @@ class Logged extends CI_Controller {
 			//[
 			//	'title' => 'Tanggal Seminar',
 			//	'key' => 'tanggal_seminar',
-			//	'attr' => 'data-type="datetime-local" data-format="DD/MM/YYYY"',
+			//	'attr' => 'data-type="datetime-local" data-format="DD/MM/YYYY hh:mm:ss"',
 			//	'type' => 'string',
 			//	'default' => '(Belum ada)'
 			//],

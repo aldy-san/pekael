@@ -1,107 +1,93 @@
-<section class="section profile">
-	<div class="row">
-		<div class="col-xl-4">
-			<div class="card">
-				<div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-					<img src="<?= $user['photo'] ? base_url('photos/'.$user['photo']) : base_url('assets/cms/img/img-placeholder.png'); ?>" alt="Profile" class="object-fit-cover rounded-circle" style="aspect-ratio:1;">
-					<h2><?= $user['name']; ?></h2>
-					<h3 class="text-capitalize"><?= $user['role']; ?></h3>
-				</div>
-			</div>
-		</div>
-		<div class="col-xl-8">
-			<div class="card">
-				<div class="card-body pt-3">
-					<ul class="nav nav-tabs nav-tabs-bordered">
-						<li class="nav-item">
-							<button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Detail</button>
-						</li>
-						<li class="nav-item">
-							<button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profil</button>
-						</li>
-						<li class="nav-item">
-							<button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Ubah Password</button>
-						</li>
-					</ul>
-					<div class="tab-content pt-2">
-						<div class="tab-pane fade show active profile-overview" id="profile-overview">
-							<h5 class="card-title">Detail Profil</h5>
+<div class="page-heading px-5">
+    <div class="page-title mb-3">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Profil</h3>
+            </div>
+        </div>
+    </div>
+    <section class="section">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center align-items-center flex-column">
+                            <h3 class="mt-3"><?= $user['nama']; ?></h3>
+                            <p class="text-small"><?= $user['email']; ?></p>
+                        </div>
+                    </div>
+                </div>
+				<?php if($user['role'] === 'mahasiswa'): ?>
+				<div class="card">
+					<div class="card-body">
+						<h3>Edit Profil</h3>
+						<form action="<?= base_url('profile/edit'); ?>" method="POST" data-parsley-validate>
 							<div class="row">
-								<div class="col-lg-3 col-md-4 label ">Full Name</div>
-								<div class="col-lg-9 col-md-8"><?= $user['name']; ?></div>
+								<div class="col-6">
+									<label for="nama" class="form-label">Nama Lengkap</label>
+									<div class="form-group">
+										<input type="text" name="nama" class="form-control" id="nama" value="<?= $user['nama']; ?>" data-parsley-required="true">
+									</div>
+								</div>
+								<div class="col-6">
+									<label for="npm" class="form-label">NPM</label>
+									<div class="form-group">
+										<input type="text" name="npm" class="form-control" id="npm" value="<?= $user['npm']; ?>" data-parsley-required="true">
+									</div>
+								</div>
+								<div class="col-6">
+									<label for="prodi" class="form-label">Prodi</label>
+									<div class="form-group">
+										<input type="text" name="prodi" class="form-control" id="prodi" value="<?= $user['prodi']; ?>" data-parsley-required="true">
+									</div>
+								</div>
+								<div class="col-6">
+									<label for="angkatan" class="form-label">Angkatan</label>
+									<div class="form-group">
+										<input type="number" min="1900" max="<?= date("Y"); ?>" step="1" name="angkatan" class="form-control" id="angkatan" value="<?= $user['angkatan']; ?>" data-parsley-required="true">
+									</div>
+								</div>
 							</div>
-							<div class="row">
-								<div class="col-lg-3 col-md-4 label">Username</div>
-								<div class="col-lg-9 col-md-8"><?= $user['username']; ?></div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary">Simpan Data</button>
 							</div>
-							<?php if ($user['role'] === 'mahasiswa'):?>
-							<div class="row">
-								<div class="col-lg-3 col-md-4 label">Email</div>
-								<div class="col-lg-9 col-md-8"><?= $user['email']; ?></div>
-							</div>
-							<?php endif; ?>
-						</div>
-						<div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-								<?= form_open_multipart('profile/edit', array('novalidate' => '', 'class' => 'row g-3 needs-validation')) ?>
-								<div class="row mb-3">
-									<label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Foto Profil</label>
-										<div class="col-md-8 col-lg-9">
-											<img src="<?= $user['photo'] ? base_url('photos/'.$user['photo']) : base_url('assets/cms/img/img-placeholder.png'); ?>" alt="Profile" class="object-fit-cover" style="aspect-ratio:1;">
-										</div>
-								</div>
-								<div class="row mb-3">
-									<label for="file" class="col-md-4 col-lg-3 col-form-label">Upload Gambar</label>
-										<div class="col-md-8">
-										<input class="form-control" type="file" id="file" name="file" accept="image/*">
-									</div>
-								</div>
-								<div class="row mb-3">
-									<label for="email" class="col-md-4 col-lg-3 col-form-label">Nama Lengkap</label>
-									<div class="col-md-8">
-										<input name="name" type="text" class="form-control" id="name" value="<?= $user['name']; ?>" required>
-									</div>
-								</div>
-								<?php if ($user['role'] === 'mahasiswa'):?>
-								<div class="row mb-3">
-									<label for="email" class="col-md-4 col-lg-3 col-form-label">Email</label>
-									<div class="col-md-8">
-										<input name="email" type="email" class="form-control" id="email" value="<?= $user['email']; ?>" required>
-									</div>
-								</div>
-								<?php endif; ?>
-								<div class="text-center">
-									<button type="submit" class="btn btn-primary">Simpan</button>
-								</div>
-								<?= form_close(); ?>
-						</div>
-						<div class="tab-pane fade pt-3" id="profile-change-password">
-							<form action="<?= base_url('profile/change-password'); ?>" method="POST">
-								<div class="row mb-3">
-									<label for="old-password" class="col-md-4 col-lg-3 col-form-label">Password saat ini</label>
-									<div class="col-md-8 col-lg-9">
-										<input name="old-password" type="password" class="form-control" id="old-password">
-									</div>
-								</div>
-								<div class="row mb-3">
-									<label for="password" class="col-md-4 col-lg-3 col-form-label">Password Baru</label>
-									<div class="col-md-8 col-lg-9">
-										<input name="password" type="password" class="form-control" id="password">
-									</div>
-								</div>
-								<div class="row mb-3">
-									<label for="confirm-password" class="col-md-4 col-lg-3 col-form-label">Konfirmasi Password baru</label>
-									<div class="col-md-8 col-lg-9">
-										<input name="confirm-password" type="password" class="form-control" id="confirm-password">
-									</div>
-								</div>
-								<div class="text-center">
-									<button type="submit" class="btn btn-primary">Ubah Password</button>
-								</div>
-							</form>
-						</div>
+						</form>
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
-</section>
+				<?php endif; ?>
+				<div class="card">
+					<div class="card-body">
+						<h3>Edit Password</h3>
+						<form action="<?= base_url('profile/change-password'); ?>" method="POST" data-parsley-validate>
+							<div class="row">
+								<div class="col-4">
+									<label for="old-password" class="form-label">Password Lama</label>
+									<div class="form-group">
+										<input type="password" name="old-password" class="form-control" id="old-password"  placeholder="Password Lama" data-parsley-required="true">
+									</div>
+								</div>
+								<div class="col-4">
+									<label for="password" class="form-label">Password Baru</label>
+									<div class="form-group">
+										<input type="password" name="password" class="form-control" id="password"  placeholder="Password" data-parsley-required="true">
+									</div>
+								</div>
+								<div class="col-4">
+									<label for="confirm-password" class="form-label">Konfirmasi Password</label>
+									<div class="form-group">
+										<input type="password" name="confirm-password" class="form-control" id="confirm-password"  placeholder="Password Baru" data-parsley-required="true">
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary">Simpan Data</button>
+							</div>
+						</form>
+					</div>
+				</div>
+            </div>
+            <div class="col-12 col-lg-8">
+            </div>
+        </div>
+    </section>
+</div>
