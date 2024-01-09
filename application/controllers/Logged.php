@@ -159,7 +159,8 @@ class Logged extends CI_Controller {
 			[
 				'title' => 'Status',
 				'key' => 'status',
-				'type' => 'status'
+				'type' => 'status',
+				'custom' => 'pkl'
 			],
 			[
 				'title' => 'Perusahaan',
@@ -289,6 +290,15 @@ class Logged extends CI_Controller {
 		}
 		$data['dosen'] = $this->db->order_by('id', 'DESC')->get_where('user', ['role' => 'dosen'])->result_array();
 		$data['data'] = $this->db->get_where($data['base'], ['id' => $id])->row_array();
+		
+		$date1 = new DateTime($data['data']['periode_mulai']);
+		$date2 = new DateTime("now");
+		$days = $date1->diff($date2)->m;
+		if($days >= 3){
+			$this->session->set_flashdata('alertForm', 'Pengajuan Sudah Melebihi Batas Waktu');
+			$this->session->set_flashdata('alertType', 'danger');
+			redirect($data['base']);
+		}
 		customView('forms/pkl', $data);
 	}
 }

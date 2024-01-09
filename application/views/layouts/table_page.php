@@ -36,7 +36,21 @@
 										<b>-</b>
 									<?php endif; ?>
 								<?php elseif ($column['type'] === 'status'): ?>
-									<strong class="text-uppercase text-success"><?= $item[$column['key']]; ?></strong>
+									<?php if ($column['custom'] === 'pkl'): ?>
+										<?php 
+											$date1 = new DateTime($item['periode_mulai']);
+											$date2 = new DateTime("now");
+											$days = $date1->diff($date2)->m;
+										?>
+										<?php if($days >= 3): ?>
+										<strong class="text-uppercase text-danger">Sudah Melebihi Batas Waktu</strong>
+										<?php else: ?>
+										<strong class="text-uppercase text-success"><?= $item[$column['key']]; ?></strong>
+										<?php endif; ?>
+									<?php endif; ?>
+									<?php if(!isset($column['custom'])): ?>
+										<strong class="text-uppercase text-success"><?= $item[$column['key']]; ?></strong>
+									<?php endif; ?>
 								<?php elseif ($column['type'] === 'modal'): ?>
 									<?php if ( str_contains($column['condition'], $item['status'])):?>
 										<button type="button" class="ms-1 me-1 btn btn-warning text-white" data-bs-toggle="modal" data-bs-target="<?= $column['key']; ?>" onclick="<?= 'modalHandler(\''.$column['key'].'\','.$item['id'].')'; ?>" >
