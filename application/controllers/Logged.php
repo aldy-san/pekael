@@ -90,68 +90,59 @@ class Logged extends CI_Controller {
 			//$data['access'] = ['EDIT'];
 
 			$data['data'] = $this->db->select('p.*, d.name as nama_dosen, pe.name as nama_penguji, s.status as status')->join('user d', 'd.id = p.id_dosen', 'left')->join('user pe', 'pe.id = p.id_penguji', 'left')->join('status s', 's.id = p.status', 'left')->order_by('id', 'DESC')->get_where($data['base'].' p', ['id_mahasiswa' => $this->globalData['user']['id']])->result_array();
-			$inserted = [
-				[
-					'title' => 'Dosen Pembimbing',
-					'key' => 'nama_dosen',
-					'type' => 'string',
-					'default' => '(Belum ada)'
-				],
-				[
-					'title' => 'Dosen Penguji',
-					'key' => 'nama_penguji',
-					'type' => 'string',
-					'default' => '(Belum ada)'
-				]
-			];
-		} else if($data['user']['role'] === 'admin'){
+			$inserted = [];
+		} else if($data['user']['role'] === 'koordinator pkl'){
 			$data['access'] = ['EDIT'];
-			$data['data'] = $this->db->select('p.*, m.name as nama_mahasiswa, d.name as nama_dosen, pe.name as nama_penguji, s.status as status')->join('user m', 'm.id = p.id_mahasiswa', 'left')->join('user d', 'd.id = p.id_dosen', 'left')->join('user pe', 'pe.id = p.id_penguji', 'left')->join('status s', 's.id = p.status', 'left')->get($data['base'].' p')->result_array();
+			$data['data'] = $this->db->select('p.*, m.name as nama_mahasiswa, m.username as npm_mahasiswa, d.name as nama_dosen, pe.name as nama_penguji, s.status as status')->join('user m', 'm.id = p.id_mahasiswa', 'left')->join('user d', 'd.id = p.id_dosen', 'left')->join('user pe', 'pe.id = p.id_penguji', 'left')->join('status s', 's.id = p.status', 'left')->get($data['base'].' p')->result_array();
 			$inserted = [
 				[
-					'title' => 'Nama Mahasiswa',
-					'key' => 'nama_mahasiswa',
+					'title' => 'NPM Mahasiswa',
+					'key' => 'npm_mahasiswa',
 					'type' => 'string',
-					'default' => '(Belum ada)'
+					'default' => '(Belum ada)',
 				],
-				[
-					'title' => 'Dosen Pembimbing',
-					'key' => 'nama_dosen',
-					'type' => 'string',
-					'default' => '(Belum ada)'
-				],
-				[
-					'title' => 'Dosen Penguji',
-					'key' => 'nama_penguji',
-					'type' => 'string',
-					'default' => '(Belum ada)'
-				]
-			];
-		} else {
-			$data['access'] = ['DETAIL'];
-			$data['data'] = $this->db->select('p.*, m.name as nama_mahasiswa, d.name as nama_dosen, pe.name as nama_penguji, s.status as status')->join('user m', 'm.id = p.id_mahasiswa', 'left')->join('user d', 'd.id = p.id_dosen', 'left')->join('user pe', 'pe.id = p.id_penguji', 'left')->join('status s', 's.id = p.status', 'left')->order_by('id', 'DESC')->where(['id_dosen' => $this->globalData['user']['id']])->or_where(['id_penguji' => $this->globalData['user']['id']])->get($data['base'].' p')->result_array();
-			$inserted = [
 				[
 					'title' => 'Nama Mahasiswa',
 					'key' => 'nama_mahasiswa',
 					'type' => 'string',
 					'default' => '(Belum ada)',
 				],
+			];
+		} else {
+			$data['access'] = ['DETAIL'];
+			$data['data'] = $this->db->select('p.*, m.name as nama_mahasiswa, m.username as npm_mahasiswa, d.name as nama_dosen, pe.name as nama_penguji, s.status as status')->join('user m', 'm.id = p.id_mahasiswa', 'left')->join('user d', 'd.id = p.id_dosen', 'left')->join('user pe', 'pe.id = p.id_penguji', 'left')->join('status s', 's.id = p.status', 'left')->order_by('id', 'DESC')->where(['id_dosen' => $this->globalData['user']['id']])->or_where(['id_penguji' => $this->globalData['user']['id']])->get($data['base'].' p')->result_array();
+			$inserted = [
 				[
-					'title' => 'Dosen Pembimbing',
-					'key' => 'nama_dosen',
+					'title' => 'NPM Mahasiswa',
+					'key' => 'npm_mahasiswa',
 					'type' => 'string',
-					'default' => '(Belum ada)'
+					'default' => '(Belum ada)',
 				],
 				[
-					'title' => 'Dosen Penguji',
-					'key' => 'nama_penguji',
+					'title' => 'Nama Mahasiswa',
+					'key' => 'nama_mahasiswa',
 					'type' => 'string',
-					'default' => '(Belum ada)'
+					'default' => '(Belum ada)',
 				]
 			];
 		}
-
+		
+		$inserted2 = [
+			[
+				'title' => 'Dosen Pembimbing',
+				'key' => 'nama_dosen',
+				'type' => 'string',
+				'default' => '(Belum ada)'
+			],
+		];
+		$inserted3 = [
+			[
+				'title' => 'Dosen Penguji',
+				'key' => 'nama_penguji',
+				'type' => 'string',
+				'default' => '(Belum ada)'
+			],
+		];
 		//$data['data'] = $this->db->select('*, m.name as nama_mahasiswa, d.name as nama_dosen')->join('user m', 'm.id = p.id_mahasiswa')->join('user d', 'd.id = p.id_dosen')->get_where($data['base'].' p', ['id_mahasiswa' => $this->globalData['user']['id']])->result_array();
 		//var_dump($data['data']);die;
 		$data['title'] = "PKL";
@@ -179,13 +170,13 @@ class Logged extends CI_Controller {
 				'attr' => 'data-type="date" data-format="DD/MM/YYYY"',
 				'type' => 'string'
 			],
-			[
-				'title' => 'Berkas Syarat',
-				'key' => 'berkas_syarat',
-				'attr' => 'data-sortable="false"',
-				'type' => 'file',
-				'default' => '(Belum ada)'
-			],
+			//[
+			//	'title' => 'Berkas Syarat',
+			//	'key' => 'berkas_syarat',
+			//	'attr' => 'data-sortable="false"',
+			//	'type' => 'file',
+			//	'default' => '(Belum ada)'
+			//],
 			[
 				'title' => 'Surat Tugas',
 				'key' => 'surat_tugas',
@@ -236,7 +227,14 @@ class Logged extends CI_Controller {
 			//	'default' => '(Belum ada)'
 			//],
 		];
-		array_splice($data['columns'], 5, 0, $inserted);
+		array_splice($data['columns'], 1, 0, $inserted);
+		if($data['user']['role'] === 'mahasiswa'){
+			array_splice($data['columns'], 4, 0, $inserted2);
+			array_splice($data['columns'], 7, 0, $inserted2);
+		}else {
+			array_splice($data['columns'], 6, 0, $inserted2);
+			array_splice($data['columns'], 9, 0, $inserted2);
+		}
 		customView('layouts/table_page', $data);
 	}
 
